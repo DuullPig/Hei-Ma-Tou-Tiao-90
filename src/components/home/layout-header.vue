@@ -8,11 +8,11 @@
     </el-col>
     <el-col class="right" :span="12">
          <el-row type="flex" justify="end" align="middle">
-             <img src="../../assets/img/tx-g.jpg" alt="">
+             <img :src="userInfo.photo ? userInfo.photo : defaultImg" alt="">
              <!-- 下拉菜单 -->
              <el-dropdown>
                  <!-- 匿名插槽 -->
-                 <span>蒙奇·D·路飞</span>
+                 <span>{{userInfo.name}}</span>
                  <el-dropdown-menu slot="dropdown">
                      <el-dropdown-item>个人信息</el-dropdown-item>
                       <el-dropdown-item>git地址</el-dropdown-item>
@@ -27,7 +27,24 @@
 
 <script>
 export default {
-
+  data () {
+    return {
+      userInfo: {}, // 定义一个用户对象
+      defaultImg: require('../../assets/img/tx-g.jpg')
+    }
+  },
+  created () {
+    let token = localStorage.getItem('user-token') // 获取用户
+    this.$axios({
+      url: '/user/profile',
+      headers: {
+        // 参数内容
+        Authorization: `Bearer ${token}`
+      }
+    }).then(result => {
+      this.userInfo = result.data.data
+    })
+  }
 }
 </script>
 
@@ -47,7 +64,7 @@ export default {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            margin-right: 10px;
+            margin-right: 10px;  //蒙奇·D·路飞
         }
     }
 }
