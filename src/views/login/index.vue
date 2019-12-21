@@ -6,7 +6,7 @@
         <img src="../../assets/img/logo_index.png" alt="">
       </div>
       <!-- 放置表单  绑定一个属性-->
-      <el-form ：model="loginForm" :rules="loginRules">
+      <el-form :model="loginForm" :rules="loginRules">
         <!-- 表单域 里面的设置 -->
         <el-form-item prop="mobile">
           <el-input v-model="loginForm.mobile" placeholder="请输入手机号"></el-input>
