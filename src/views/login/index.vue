@@ -63,10 +63,20 @@ export default {
   },
   methods: {
     submitLogin () {
-      this.$refs.myForm.validate(function (isOK) {
+      this.$refs.myForm.validate((isOK) => {
         if (isOK) {
           // 校验通过 调用登录接口
-          console.log('校验通过跳转登录接口')
+          this.$axios({
+            url: '/authorizations', // 请求地址
+            method: 'post', // 类型
+            data: this.loginForm
+          }).then(result => {
+            // 只接收真确的
+            // 前端缓存 登录成功返回令牌
+            window.localStorage.setItem('user-token', result.data.data.token)
+          }).catch(() => {
+            // 只接收错误的
+          })
         }
       })
     }
