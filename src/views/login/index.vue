@@ -74,8 +74,13 @@ export default {
             // 只接收真确的
             // 前端缓存 登录成功返回令牌
             window.localStorage.setItem('user-token', result.data.data.token)
+            this.$router.push('/home')
           }).catch(() => {
             // 只接收错误的
+            this.$message({
+              type: 'warning',
+              message: '对不起您的手机号或验证吗不正确'
+            })
           })
         }
       })
