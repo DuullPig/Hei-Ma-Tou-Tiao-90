@@ -6,7 +6,7 @@
         <img src="../../assets/img/logo_index.png" alt="">
       </div>
       <!-- 放置表单  绑定一个属性-->
-      <el-form :model="loginForm" :rules="loginRules">
+      <el-form ref="myForm" :model="loginForm" :rules="loginRules">
         <!-- 表单域 里面的设置 -->
         <el-form-item prop="mobile">
           <el-input v-model="loginForm.mobile" placeholder="请输入手机号"></el-input>
@@ -21,7 +21,7 @@
            <el-checkbox v-model="loginForm.check">我以阅读并同意用户协议和隐私条款</el-checkbox>
         </el-form-item>
         <el-form-item>
-         <el-button type="primary" style="width:100%">登录</el-button>
+         <el-button @click="submitLogin" type="primary" style="width:100%">登录</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -39,7 +39,36 @@ export default {
       },
       loginRules: {
         // 验证对象
+        mobile: [{ required: true, message: '请输入你的手机号' }, {
+          pattern: /^1[3456789]\d{9}$/, message: '手机号格式不正确'
+        }],
+        code: [{ required: true, message: '请输入你的验证码' }, {
+          pattern: /^\d{6}$/, message: '验证码不正确'
+        }],
+        check: [{ validator: function (rule, valie, callback) {
+          // 自定义校验函数
+        // rule 规则没啥用
+        // valie 要校验的字段值
+        // callback 是一个回调函数
+          if (valie) {
+            // 认为勾选
+            callback() // 规则通过
+          } else {
+            // 没有勾选
+            callback(new Error('你应该同意我们的霸王条款，让我们欺负你')) // 如果没勾选校验失败
+          }
+        } }]
       }
+    }
+  },
+  methods: {
+    submitLogin () {
+      this.$refs.myForm.validate(function (isOK) {
+        if (isOK) {
+          // 校验通过 调用登录接口
+          console.log('校验通过跳转登录接口')
+        }
+      })
     }
   }
 }
