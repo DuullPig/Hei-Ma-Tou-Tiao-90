@@ -73,7 +73,7 @@ export default {
           }).then(result => {
             // 只接收真确的
             // 前端缓存 登录成功返回令牌
-            window.localStorage.setItem('user-token', result.data.data.token)
+            window.localStorage.setItem('user-token', result.data.token)
             this.$router.push('/home')
           }).catch(() => {
             // 只接收错误的
