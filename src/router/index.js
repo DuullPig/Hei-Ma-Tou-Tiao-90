@@ -15,8 +15,11 @@ const routes = [
     name: 'home',
     component: Home,
     children: [{
-      path: '',
+      path: '', // 二级路由地址跳转什么都不写 代表二级路由默认组件
       component: Home2
+    }, {
+      path: 'comment',
+      component: () => import('../views/commcnt')
     }]
 
   }, {
