@@ -55,11 +55,14 @@ export default {
         // 调用接口
         this.$axios({
           method: 'put',
-          utl: '/comments/status',
-          params: { article_id: row.id },
+          url: '/comments/status',
+          params: { article_id: row.id.toString() },
           data: { allow_comment: !row.comment_status }
         }).then(result => {
+          debugger
           this.getComment()
+        }).catch(() => {
+          debugger
         })
       })
     }
