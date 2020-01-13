@@ -31,6 +31,18 @@
               </div>
           </el-tab-pane>
       </el-tabs>
+            <!-- 公共分页组件justify="center"居中 -->
+      <el-row type="flex" justify="center">
+        <el-pagination
+          :current-page="page.currentPage"
+          :page-size="page.pageSize"
+          :total="page.total"
+          @current-change="changePage"
+          background
+          layout="prev, pager, next"
+          >
+        </el-pagination>
+      </el-row>
   </el-card>
 </template>
 
@@ -39,12 +51,22 @@ export default {
   data () {
     return {
       activeName: 'all',
-      list: []
+      list: [],
+      page: {
+        currentPage: 1,
+        pageSize: 8,
+        total: 0
+      }
     }
   },
   methods: {
+    changePage (newPage) {
+      this.page.currentPage = newPage
+      this.getMaterial()
+    },
     // 切换页签方法
     changeTab () {
+      this.page.currentPage = 1
       this.getMaterial()
     },
     // 获取素材方法
@@ -52,10 +74,13 @@ export default {
       this.$axios({
         url: '/user/images',
         params: {
+          page: this.page.currentPage,
+          per_page: this.page.pageSize,
           collect: this.activeName === 'collect'// false是获取数据true是获取收藏数据
         }
       }).then(result => {
         this.list = result.data.results // 获取所有的图片数据
+        this.page.total = result.data.total_count
       })
     }
   },
