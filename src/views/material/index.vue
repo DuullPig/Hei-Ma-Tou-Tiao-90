@@ -16,8 +16,9 @@
                   <el-card class="img-card" v-for="item in list" :key="item.id">
                       <img :src="item.url" alt="">
                       <el-row class="operate" type="flex" align="middle" justify="space-around">
-                          <i class="el-icon-star-on"></i>
-                          <i class="el-icon-delete-solid"></i>
+                        <!-- 需要根据当前是否收藏的状态来绝对字体颜色 -->
+                          <i @change="collectOrCancel(item)" :style="{ color: item.is_collected ? 'red' : '#000'}" class="el-icon-star-on"></i>
+                          <i @change="delMaterial(item.id)" class="el-icon-delete-solid"></i>
                       </el-row>
                   </el-card>
               </div>
@@ -60,6 +61,30 @@ export default {
     }
   },
   methods: {
+    // 删除用户图片素材
+    delMaterial (id) {
+      this.$confirm('你确定要删除此图片吗?').then(() => {
+        this.$axios({
+          method: 'delete',
+          url: `/user/images/${id}`
+        }).then(() => {
+          this.getMaterial() // 重新拉取数据
+        })
+      })
+    },
+    // 取消或者收藏
+    collectOrCancel (item) {
+      // item.iscollected true => 取消收藏 ? 收藏
+      this.$axios({
+        method: 'put',
+        url: `/user/images/${item.id}`,
+        data: {
+          collect: !item.is_collected // 取反 因为 收藏  =>取消收藏
+        }
+      }).then(result => {
+        this.getMaterial() // 重新拉取数据
+      })
+    },
     changePage (newPage) {
       this.page.currentPage = newPage
       this.getMaterial()
@@ -111,6 +136,9 @@ export default {
                 font-size: 20px;
                 height: 36px;
                 background-color: #f4f5f6;
+                i {
+                  cursor: pointer;
+                }
             }
         }
     }
